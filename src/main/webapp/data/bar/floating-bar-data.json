@@ -1,0 +1,26 @@
+[
+  {
+    "name": "John",
+    "startTime": 8,
+    "endTime": 11,
+    "color": "#FF0F00"
+  },
+  {
+    "name": "Joe",
+    "startTime": 10,
+    "endTime": 13,
+    "color": "#FF9E01"
+  },
+  {
+    "name": "Susan",
+    "startTime": 11,
+    "endTime": 18,
+    "color": "#F8FF01"
+  },
+  {
+    "name": "Eaton",
+    "startTime": 15,
+    "endTime": 19,
+    "color": "#04D215"
+  }
+]

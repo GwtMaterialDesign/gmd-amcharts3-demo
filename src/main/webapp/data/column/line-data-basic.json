@@ -1,0 +1,52 @@
+[
+  {
+    "country": "USA",
+    "visits": 3025,
+    "color": "#0D47A1"
+  },
+  {
+    "country": "China",
+    "visits": 1882,
+    "color": "#1565C0"
+  },
+  {
+    "country": "Japan",
+    "visits": 1809,
+    "color": "#1976D2"
+  },
+  {
+    "country": "Germany",
+    "visits": 1322,
+    "color": "#1E88E5"
+  },
+  {
+    "country": "UK",
+    "visits": 1122,
+    "color": "#2196F3"
+  },
+  {
+    "country": "France",
+    "visits": 1114,
+    "color": "#42A5F5"
+  },
+  {
+    "country": "India",
+    "visits": 984,
+    "color": "#64B5F6"
+  },
+  {
+    "country": "Spain",
+    "visits": 711,
+    "color": "#90CAF9"
+  },
+  {
+    "country": "Netherlands",
+    "visits": 665,
+    "color": "#BBDEFB"
+  },
+  {
+    "country": "Canada",
+    "visits": 441,
+    "color": "#E3F2FD"
+  }
+]
