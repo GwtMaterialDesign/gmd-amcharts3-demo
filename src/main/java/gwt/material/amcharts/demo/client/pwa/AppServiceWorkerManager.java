@@ -19,24 +19,25 @@
  */
 package gwt.material.amcharts.demo.client.pwa;
 
-import gwt.material.design.client.pwa.serviceworker.DefaultServiceWorkerManager;
+import gwt.material.design.client.pwa.serviceworker.ServiceEvent;
+import gwt.material.design.client.pwa.serviceworker.ServiceWorkerManager;
 import gwt.material.design.client.ui.MaterialToast;
 
-public class AppServiceWorkerManager extends DefaultServiceWorkerManager {
+public class AppServiceWorkerManager extends ServiceWorkerManager {
 
     public AppServiceWorkerManager(String resource) {
         super(resource);
     }
 
     @Override
-    protected void onOffline() {
-        super.onOffline();
+    public boolean onOffline(ServiceEvent event) {
         MaterialToast.fireToast("You are now offline");
+        return super.onOffline(event);
     }
 
     @Override
-    protected void onOnline() {
-        super.onOnline();
+    public boolean onOnline(ServiceEvent event) {
         MaterialToast.fireToast("You are now Online");
+        return super.onOnline(event);
     }
 }
