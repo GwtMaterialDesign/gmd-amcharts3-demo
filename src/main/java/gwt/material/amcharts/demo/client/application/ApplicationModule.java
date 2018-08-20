@@ -20,21 +20,13 @@
 package gwt.material.amcharts.demo.client.application;
 
 import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
-import gwt.material.amcharts.demo.client.application.api.ApiModule;
-import gwt.material.amcharts.demo.client.application.chart.ChartModule;
 import gwt.material.amcharts.demo.client.application.home.HomeModule;
-import gwt.material.amcharts.demo.client.application.map.MapModule;
-import gwt.material.amcharts.demo.client.application.stock.StockModule;
 
 public class
 ApplicationModule extends AbstractPresenterModule {
     @Override
     protected void configure() {
         install(new HomeModule());
-        install(new ChartModule());
-        install(new MapModule());
-        install(new StockModule());
-        install(new ApiModule());
 
         bindPresenter(ApplicationPresenter.class, ApplicationPresenter.MyView.class, ApplicationView.class,
                 ApplicationPresenter.MyProxy.class);

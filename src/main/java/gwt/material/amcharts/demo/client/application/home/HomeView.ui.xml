@@ -18,11 +18,9 @@
   #L%
   -->
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
-        xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+        xmlns:m="urn:import:gwt.material.design.client.ui">
 
-    <g:HTMLPanel>
-        
-        <p>Hello world!</p>
-        
-    </g:HTMLPanel>
+    <m:MaterialPanel>
+        <m:MaterialPanel m:id="div"/>
+    </m:MaterialPanel>
 </ui:UiBinder>
