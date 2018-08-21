@@ -21,6 +21,7 @@
         xmlns:m="urn:import:gwt.material.design.client.ui">
 
     <m:MaterialPanel>
-        <m:MaterialPanel m:id="div"/>
+        <m:MaterialCard ui:field="pieChartPanel" height="400px"/>
+        <m:MaterialCard ui:field="xyChartPanel" height="400px"/>
     </m:MaterialPanel>
 </ui:UiBinder>
