@@ -29,11 +29,19 @@ import gwt.material.design.amcharts.client.ui.chart.PieChart;
 import gwt.material.design.amcharts.client.ui.chart.XYChart;
 import gwt.material.design.amcharts.client.ui.chart.axis.CategoryAxis;
 import gwt.material.design.amcharts.client.ui.chart.axis.ValueAxis;
-import gwt.material.design.amcharts.client.ui.chart.resources.ChartClientBundle;
+import gwt.material.design.amcharts.client.ui.chart.base.Color;
+import gwt.material.design.amcharts.client.ui.chart.base.Container;
+import gwt.material.design.amcharts.client.ui.chart.base.Percent;
+import gwt.material.design.amcharts.client.ui.chart.base.Rectangle;
+import gwt.material.design.amcharts.client.ui.chart.constants.Align;
+import gwt.material.design.amcharts.client.ui.chart.constants.Valign;
+import gwt.material.design.amcharts.client.ui.chart.cursor.XYCursor;
+import gwt.material.design.amcharts.client.ui.chart.export.ExportMenu;
 import gwt.material.design.amcharts.client.ui.chart.scrollbar.XYChartScrollbar;
 import gwt.material.design.amcharts.client.ui.chart.series.LineSeries;
 import gwt.material.design.amcharts.client.ui.chart.series.PieSeries;
-import gwt.material.design.client.MaterialDesignBase;
+import gwt.material.design.amcharts.client.ui.chart.theme.AnimatedTheme;
+import gwt.material.design.amcharts.client.ui.chart.theme.MaterialTheme;
 import gwt.material.design.client.ui.MaterialCard;
 
 import javax.inject.Inject;
@@ -43,7 +51,7 @@ public class HomeView extends ViewImpl implements HomePresenter.MyView {
     }
 
     @UiField
-    MaterialCard pieChartPanel, xyChartPanel;
+    MaterialCard pieChartPanel, xyChartPanel, colorsPanel;
 
     @Inject
     HomeView(Binder uiBinder) {
@@ -54,9 +62,9 @@ public class HomeView extends ViewImpl implements HomePresenter.MyView {
     protected void onAttach() {
         super.onAttach();
 
-        // Inject the necessary javascript resources
-        MaterialDesignBase.injectDebugJs(ChartClientBundle.INSTANCE.coreJs());
-        MaterialDesignBase.injectDebugJs(ChartClientBundle.INSTANCE.chartsJs());
+        // Theming
+        Am4Core.useTheme(new AnimatedTheme());
+        Am4Core.useTheme(new MaterialTheme());
 
         // Pie Chart Demo
         PieChart pieChart = (PieChart) Am4Core.create(pieChartPanel, Am4Charts.PieChart);
@@ -64,26 +72,47 @@ public class HomeView extends ViewImpl implements HomePresenter.MyView {
         series.dataFields.value = "litres";
         series.dataFields.category = "country";
         pieChart.dataSource.url = "data/basic.json";
+        // Export feature
+        pieChart.exporting.menu = new ExportMenu();
+
 
         // XYChart Demo
         XYChart xyChart = (XYChart) Am4Core.create(xyChartPanel, Am4Charts.XYChart);
         CategoryAxis categoryAxis = (CategoryAxis) xyChart.xAxes.push(new CategoryAxis());
-        categoryAxis.dataFields.category = "country";
-        categoryAxis.title.text = "Countries";
+        categoryAxis.dataFields.category = "day";
+        categoryAxis.title.text = "Days";
 
         ValueAxis valueAxis = (ValueAxis) xyChart.yAxes.push(new ValueAxis());
-        valueAxis.title.text = "Litres sold (M)";
+        valueAxis.title.text = "Values";
 
         LineSeries lineSeries = (LineSeries) xyChart.series.push(new LineSeries());
-        lineSeries.dataFields.valueY = "litres";
-        lineSeries.dataFields.categoryX = "country";
-        xyChart.dataSource.url = "data/basic.json";
+        lineSeries.dataFields.valueY = "value";
+        lineSeries.dataFields.categoryX = "day";
+        xyChart.dataSource.url = "data/large-data.json";
 
         XYChartScrollbar scrollbarX = new XYChartScrollbar();
         scrollbarX.series.push(lineSeries);
         xyChart.scrollbarX = scrollbarX;
 
+
+        xyChart.cursor = new XYCursor();
         // Hiding the scrollbar
         /*scrollbarX.scrollbarChart.seriesContainer.hide();*/
+
+        // Colors
+        Container container = (Container) Am4Core.create(colorsPanel, Am4Core.Container);
+        container.width = new Percent(100);
+        container.height = new Percent(100);
+
+        Rectangle rectangle = (Rectangle) container.createChild(Am4Core.Rectangle);
+        rectangle.width = new Percent(50);
+        rectangle.height = new Percent(50);
+        rectangle.align = Align.CENTER;
+        rectangle.valign = Valign.MIDDLE;
+        rectangle.strokeWidth = 3;
+        rectangle.fill = new Color("green").lighten(0.5);
+        rectangle.stroke = new Color("red").lighten(-0.5);
+
+
     }
 }
