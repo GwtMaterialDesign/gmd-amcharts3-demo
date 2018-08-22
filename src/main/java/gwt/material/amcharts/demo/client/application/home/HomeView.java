@@ -27,7 +27,7 @@ import gwt.material.design.amcharts.client.ui.Am4Charts;
 import gwt.material.design.amcharts.client.ui.Am4Core;
 import gwt.material.design.amcharts.client.ui.chart.PieChart;
 import gwt.material.design.amcharts.client.ui.chart.XYChart;
-import gwt.material.design.amcharts.client.ui.chart.axis.CategoryAxis;
+import gwt.material.design.amcharts.client.ui.chart.axis.DateAxis;
 import gwt.material.design.amcharts.client.ui.chart.axis.ValueAxis;
 import gwt.material.design.amcharts.client.ui.chart.base.Color;
 import gwt.material.design.amcharts.client.ui.chart.base.Container;
@@ -62,7 +62,7 @@ public class HomeView extends ViewImpl implements HomePresenter.MyView {
     protected void onAttach() {
         super.onAttach();
 
-        // Theming
+        // Themes
         Am4Core.useTheme(new AnimatedTheme());
         Am4Core.useTheme(new MaterialTheme());
 
@@ -78,32 +78,29 @@ public class HomeView extends ViewImpl implements HomePresenter.MyView {
 
         // XYChart Demo
         XYChart xyChart = (XYChart) Am4Core.create(xyChartPanel, Am4Charts.XYChart);
-        CategoryAxis categoryAxis = (CategoryAxis) xyChart.xAxes.push(new CategoryAxis());
-        categoryAxis.dataFields.category = "day";
-        categoryAxis.title.text = "Days";
-
+        // DateAxis
+        DateAxis dateAxis = (DateAxis) xyChart.xAxes.push(new DateAxis());
+        // ValueAxis
         ValueAxis valueAxis = (ValueAxis) xyChart.yAxes.push(new ValueAxis());
-        valueAxis.title.text = "Values";
-
+        // Number Formatter
+        valueAxis.numberFormatter.numberFormat = "#.0a";
+        // Series
         LineSeries lineSeries = (LineSeries) xyChart.series.push(new LineSeries());
         lineSeries.dataFields.valueY = "value";
-        lineSeries.dataFields.categoryX = "day";
+        lineSeries.dataFields.dateX = "day";
         xyChart.dataSource.url = "data/large-data.json";
-
+        // Scrollbar
         XYChartScrollbar scrollbarX = new XYChartScrollbar();
         scrollbarX.series.push(lineSeries);
         xyChart.scrollbarX = scrollbarX;
-
-
+        // Cursor
         xyChart.cursor = new XYCursor();
-        // Hiding the scrollbar
-        /*scrollbarX.scrollbarChart.seriesContainer.hide();*/
 
-        // Colors
+
+        // Colors & SVG Renderer
         Container container = (Container) Am4Core.create(colorsPanel, Am4Core.Container);
         container.width = new Percent(100);
         container.height = new Percent(100);
-
         Rectangle rectangle = (Rectangle) container.createChild(Am4Core.Rectangle);
         rectangle.width = new Percent(50);
         rectangle.height = new Percent(50);
@@ -112,7 +109,5 @@ public class HomeView extends ViewImpl implements HomePresenter.MyView {
         rectangle.strokeWidth = 3;
         rectangle.fill = new Color("green").lighten(0.5);
         rectangle.stroke = new Color("red").lighten(-0.5);
-
-
     }
 }
