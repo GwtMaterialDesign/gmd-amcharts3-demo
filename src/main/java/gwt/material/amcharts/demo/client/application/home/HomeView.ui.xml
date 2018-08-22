@@ -23,6 +23,7 @@
     <m:MaterialPanel>
         <m:MaterialCard ui:field="pieChartPanel" height="400px"/>
         <m:MaterialCard ui:field="xyChartPanel" height="400px"/>
+        <m:MaterialCard ui:field="columnChartPanel" height="400px"/>
         <m:MaterialCard ui:field="colorsPanel" height="400px"/>
         <m:MaterialCard ui:field="colorSetPanel" height="400px"/>
     </m:MaterialPanel>

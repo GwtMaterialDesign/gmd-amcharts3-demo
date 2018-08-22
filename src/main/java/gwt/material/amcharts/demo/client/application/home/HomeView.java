@@ -21,6 +21,7 @@ package gwt.material.amcharts.demo.client.application.home;
 
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewImpl;
 import gwt.material.design.amcharts.client.ui.Am4Charts;
@@ -38,20 +39,23 @@ import gwt.material.design.amcharts.client.ui.chart.constants.Valign;
 import gwt.material.design.amcharts.client.ui.chart.cursor.XYCursor;
 import gwt.material.design.amcharts.client.ui.chart.export.ExportMenu;
 import gwt.material.design.amcharts.client.ui.chart.scrollbar.XYChartScrollbar;
+import gwt.material.design.amcharts.client.ui.chart.series.ColumnSeries;
 import gwt.material.design.amcharts.client.ui.chart.series.LineSeries;
 import gwt.material.design.amcharts.client.ui.chart.series.PieSeries;
 import gwt.material.design.amcharts.client.ui.chart.theme.AnimatedTheme;
 import gwt.material.design.amcharts.client.ui.chart.theme.MaterialTheme;
 import gwt.material.design.client.ui.MaterialCard;
+import gwt.material.design.client.ui.MaterialToast;
 
 import javax.inject.Inject;
+import java.util.Date;
 
 public class HomeView extends ViewImpl implements HomePresenter.MyView {
     interface Binder extends UiBinder<Widget, HomeView> {
     }
 
     @UiField
-    MaterialCard pieChartPanel, xyChartPanel, colorsPanel;
+    MaterialCard pieChartPanel, xyChartPanel, colorsPanel, columnChartPanel;
 
     @Inject
     HomeView(Binder uiBinder) {
@@ -66,37 +70,51 @@ public class HomeView extends ViewImpl implements HomePresenter.MyView {
         Am4Core.useTheme(new AnimatedTheme());
         Am4Core.useTheme(new MaterialTheme());
 
-        // Pie Chart Demo
-        PieChart pieChart = (PieChart) Am4Core.create(pieChartPanel, Am4Charts.PieChart);
-        PieSeries series = pieChart.series.push(new PieSeries());
-        series.dataFields.value = "litres";
-        series.dataFields.category = "country";
-        pieChart.dataSource.url = "data/basic.json";
-        // Export feature
-        pieChart.exporting.menu = new ExportMenu();
+        createSimplePieChart();
+        createXYChartAdvance();
+        createNewSVGRenderer();
+        createLineChart();
+    }
 
-
+    protected void createLineChart() {
         // XYChart Demo
-        XYChart xyChart = (XYChart) Am4Core.create(xyChartPanel, Am4Charts.XYChart);
+        XYChart xyChart = (XYChart) Am4Core.create(columnChartPanel, Am4Charts.XYChart);
         // DateAxis
         DateAxis dateAxis = (DateAxis) xyChart.xAxes.push(new DateAxis());
         // ValueAxis
         ValueAxis valueAxis = (ValueAxis) xyChart.yAxes.push(new ValueAxis());
         // Number Formatter
-        valueAxis.numberFormatter.numberFormat = "#.0a";
+        valueAxis.numberFormatter.numberFormat = "'$' #.a";
         // Series
-        LineSeries lineSeries = (LineSeries) xyChart.series.push(new LineSeries());
-        lineSeries.dataFields.valueY = "value";
-        lineSeries.dataFields.dateX = "day";
+        ColumnSeries columnSeries = (ColumnSeries) xyChart.series.push(new ColumnSeries());
+        columnSeries.dataFields.valueY = "value";
+        columnSeries.dataFields.dateX = "day";
+        columnSeries.strokeWidth = 1.8;
         xyChart.dataSource.url = "data/large-data.json";
         // Scrollbar
         XYChartScrollbar scrollbarX = new XYChartScrollbar();
-        scrollbarX.series.push(lineSeries);
+        scrollbarX.series.push(columnSeries);
         xyChart.scrollbarX = scrollbarX;
+        xyChart.scrollbarX.updateWhileMoving = false;
+        // TODO : Just a workaround to hide the chart
+        //xyChart.height = 60;
         // Cursor
         xyChart.cursor = new XYCursor();
+        // Events implementation
+        xyChart.events.on("hit", param1 -> {
+            MaterialToast.fireToast("Event Fired: click");
+        }, this);
+        // Zooming
+        xyChart.zoomToIndexes(0, 23);
+        xyChart.events.on("datavalidated", param1 -> {
+            Date firstDecember = new Date(117, 11, 1);
+            Date lastDecember = new Date(117, 11, 31);
+            dateAxis.zoomToDates(firstDecember, lastDecember);
+            MaterialToast.fireToast("Event Fired: datavalidated");
+        }, this);
+    }
 
-
+    protected void createNewSVGRenderer() {
         // Colors & SVG Renderer
         Container container = (Container) Am4Core.create(colorsPanel, Am4Core.Container);
         container.width = new Percent(100);
@@ -109,5 +127,54 @@ public class HomeView extends ViewImpl implements HomePresenter.MyView {
         rectangle.strokeWidth = 3;
         rectangle.fill = new Color("green").lighten(0.5);
         rectangle.stroke = new Color("red").lighten(-0.5);
+    }
+
+    protected void createXYChartAdvance() {
+        // XYChart Demo
+        XYChart xyChart = (XYChart) Am4Core.create(xyChartPanel, Am4Charts.XYChart);
+        // DateAxis
+        DateAxis dateAxis = (DateAxis) xyChart.xAxes.push(new DateAxis());
+        // ValueAxis
+        ValueAxis valueAxis = (ValueAxis) xyChart.yAxes.push(new ValueAxis());
+        // Number Formatter
+        valueAxis.numberFormatter.numberFormat = "'$' #.a";
+        // Series
+        LineSeries lineSeries = (LineSeries) xyChart.series.push(new LineSeries());
+        lineSeries.dataFields.valueY = "value";
+        lineSeries.dataFields.dateX = "day";
+        lineSeries.strokeWidth = 1.8;
+        xyChart.dataSource.url = "data/large-data.json";
+        // Scrollbar
+        XYChartScrollbar scrollbarX = new XYChartScrollbar();
+        scrollbarX.series.push(lineSeries);
+        xyChart.scrollbarX = scrollbarX;
+        xyChart.scrollbarX.updateWhileMoving = false;
+        // TODO : Just a workaround to hide the chart
+        //xyChart.height = 60;
+        // Cursor
+        xyChart.cursor = new XYCursor();
+        // Events implementation
+        xyChart.events.on("hit", param1 -> {
+            MaterialToast.fireToast("Event Fired: click");
+        }, this);
+        // Zooming
+        xyChart.zoomToIndexes(0, 23);
+        xyChart.events.on("datavalidated", param1 -> {
+            Date firstDecember = new Date(117, 11, 1);
+            Date lastDecember = new Date(117, 11, 31);
+            dateAxis.zoomToDates(firstDecember, lastDecember);
+            MaterialToast.fireToast("Event Fired: datavalidated");
+        }, this);
+    }
+
+    protected void createSimplePieChart() {
+        // Pie Chart Demo
+        PieChart pieChart = (PieChart) Am4Core.create(pieChartPanel, Am4Charts.PieChart);
+        PieSeries series = pieChart.series.push(new PieSeries());
+        series.dataFields.value = "litres";
+        series.dataFields.category = "country";
+        pieChart.dataSource.url = "data/basic.json";
+        // Export feature
+        pieChart.exporting.menu = new ExportMenu();
     }
 }
