@@ -37,12 +37,21 @@ import gwt.material.design.amcharts.client.ui.chart.constants.Align;
 import gwt.material.design.amcharts.client.ui.chart.constants.Valign;
 import gwt.material.design.amcharts.client.ui.chart.cursor.XYCursor;
 import gwt.material.design.amcharts.client.ui.chart.export.ExportMenu;
+import gwt.material.design.amcharts.client.ui.chart.resources.ChartClientBundle;
 import gwt.material.design.amcharts.client.ui.chart.scrollbar.XYChartScrollbar;
 import gwt.material.design.amcharts.client.ui.chart.series.ColumnSeries;
 import gwt.material.design.amcharts.client.ui.chart.series.LineSeries;
 import gwt.material.design.amcharts.client.ui.chart.series.PieSeries;
+import gwt.material.design.amcharts.client.ui.chart.state.SpriteState;
 import gwt.material.design.amcharts.client.ui.chart.theme.AnimatedTheme;
 import gwt.material.design.amcharts.client.ui.chart.theme.MaterialTheme;
+import gwt.material.design.amcharts.client.ui.map.MapChart;
+import gwt.material.design.amcharts.client.ui.map.base.MapPolygon;
+import gwt.material.design.amcharts.client.ui.map.geodata.WorldLow;
+import gwt.material.design.amcharts.client.ui.map.projections.Miller;
+import gwt.material.design.amcharts.client.ui.map.series.MapPolygonSeries;
+import gwt.material.design.amcharts.client.ui.map.series.MapSeries;
+import gwt.material.design.client.MaterialDesignBase;
 import gwt.material.design.client.ui.MaterialCard;
 import gwt.material.design.client.ui.MaterialToast;
 
@@ -54,7 +63,7 @@ public class HomeView extends ViewImpl implements HomePresenter.MyView {
     }
 
     @UiField
-    MaterialCard pieChartPanel, xyChartPanel, colorsPanel, columnChartPanel;
+    MaterialCard pieChartPanel, xyChartPanel, colorsPanel, columnChartPanel, mapChartPanel;
 
     @Inject
     HomeView(Binder uiBinder) {
@@ -73,11 +82,39 @@ public class HomeView extends ViewImpl implements HomePresenter.MyView {
         createLineChart();
         createNewSVGRenderer();
         createColumnChart();
+        createMapChart();
+    }
+
+    protected void createMapChart() {
+        //TODO: Move this internally
+        MaterialDesignBase.injectDebugJs(ChartClientBundle.INSTANCE.mapJs());
+        MaterialDesignBase.injectDebugJs(ChartClientBundle.INSTANCE.worldLowJs());
+
+        // Create map instance
+        MapChart mapChart = MapChart.create(mapChartPanel);
+
+        // Set map definition
+        mapChart.geodata = WorldLow.get();
+
+        // Set projection
+        mapChart.projection = new Miller();
+
+        MapPolygonSeries polygonSeries = new MapPolygonSeries();
+        polygonSeries.useGeodata = true;
+
+        // Configure Series
+        MapPolygon polygonTemplate = polygonSeries.mapPolygons.template;
+        polygonTemplate.tooltipText = "{name}";
+        polygonTemplate.fill = new Color("#74B266");
+        mapChart.series.push(polygonSeries);
+
+        SpriteState state = polygonTemplate.states.create("hover");
+        state.properties.fill = new Color("red");
     }
 
     protected void createColumnChart() {
         // XYChart Demo
-        XYChart xyChart = (XYChart) Am4Core.create(columnChartPanel, Am4Charts.XYChart);
+        XYChart xyChart = XYChart.create(columnChartPanel);
         // DateAxis
         DateAxis dateAxis = (DateAxis) xyChart.xAxes.push(new DateAxis());
         // ValueAxis
@@ -148,8 +185,6 @@ public class HomeView extends ViewImpl implements HomePresenter.MyView {
         scrollbarX.series.push(lineSeries);
         xyChart.scrollbarX = scrollbarX;
         xyChart.scrollbarX.updateWhileMoving = false;
-        // TODO : Just a workaround to hide the chart
-        //xyChart.height = 60;
         // Cursor
         xyChart.cursor = new XYCursor();
         // Events implementation
