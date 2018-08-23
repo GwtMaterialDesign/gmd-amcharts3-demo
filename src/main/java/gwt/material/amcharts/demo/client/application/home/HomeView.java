@@ -21,7 +21,6 @@ package gwt.material.amcharts.demo.client.application.home;
 
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewImpl;
 import gwt.material.design.amcharts.client.ui.Am4Charts;
@@ -70,13 +69,13 @@ public class HomeView extends ViewImpl implements HomePresenter.MyView {
         Am4Core.useTheme(new AnimatedTheme());
         Am4Core.useTheme(new MaterialTheme());
 
-        createSimplePieChart();
-        createXYChartAdvance();
-        createNewSVGRenderer();
+        createPieChart();
         createLineChart();
+        createNewSVGRenderer();
+        createColumnChart();
     }
 
-    protected void createLineChart() {
+    protected void createColumnChart() {
         // XYChart Demo
         XYChart xyChart = (XYChart) Am4Core.create(columnChartPanel, Am4Charts.XYChart);
         // DateAxis
@@ -129,7 +128,7 @@ public class HomeView extends ViewImpl implements HomePresenter.MyView {
         rectangle.stroke = new Color("red").lighten(-0.5);
     }
 
-    protected void createXYChartAdvance() {
+    protected void createLineChart() {
         // XYChart Demo
         XYChart xyChart = (XYChart) Am4Core.create(xyChartPanel, Am4Charts.XYChart);
         // DateAxis
@@ -167,7 +166,7 @@ public class HomeView extends ViewImpl implements HomePresenter.MyView {
         }, this);
     }
 
-    protected void createSimplePieChart() {
+    protected void createPieChart() {
         // Pie Chart Demo
         PieChart pieChart = (PieChart) Am4Core.create(pieChartPanel, Am4Charts.PieChart);
         PieSeries series = pieChart.series.push(new PieSeries());
