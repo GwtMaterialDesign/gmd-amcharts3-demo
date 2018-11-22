@@ -27,5 +27,13 @@
         <m:MaterialCard ui:field="colorsPanel" height="400px"/>
         <m:MaterialCard ui:field="colorSetPanel" height="400px"/>
         <m:MaterialCard ui:field="mapChartPanel" height="400px"/>
+        <m:MaterialCard ui:field="radarChartPanel" height="400px"/>
+        <m:MaterialCard ui:field="treeMapPanel" height="400px"/>
+        <m:MaterialCard ui:field="sankeyDiagramPanel" height="400px"/>
+        <m:MaterialCard ui:field="chordDiagramPanel" height="400px"/>
+        <m:MaterialCard ui:field="slicedChartPanel" height="400px"/>
+        <m:MaterialCard ui:field="slicedPyramidChartPanel" height="400px"/>
+        <m:MaterialCard ui:field="slicedPictorialChartPanel" height="400px"/>
+        <m:MaterialCard ui:field="gaugeChartPanel" height="400px"/>
     </m:MaterialPanel>
 </ui:UiBinder>

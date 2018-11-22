@@ -25,23 +25,18 @@ import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewImpl;
 import gwt.material.design.amcharts.client.ui.Am4Charts;
 import gwt.material.design.amcharts.client.ui.Am4Core;
-import gwt.material.design.amcharts.client.ui.chart.PieChart;
-import gwt.material.design.amcharts.client.ui.chart.XYChart;
+import gwt.material.design.amcharts.client.ui.chart.*;
+import gwt.material.design.amcharts.client.ui.chart.axis.CategoryAxis;
 import gwt.material.design.amcharts.client.ui.chart.axis.DateAxis;
 import gwt.material.design.amcharts.client.ui.chart.axis.ValueAxis;
-import gwt.material.design.amcharts.client.ui.chart.base.Color;
-import gwt.material.design.amcharts.client.ui.chart.base.Container;
-import gwt.material.design.amcharts.client.ui.chart.base.Percent;
-import gwt.material.design.amcharts.client.ui.chart.base.Rectangle;
-import gwt.material.design.amcharts.client.ui.chart.constants.Align;
-import gwt.material.design.amcharts.client.ui.chart.constants.Valign;
+import gwt.material.design.amcharts.client.ui.chart.base.*;
+import gwt.material.design.amcharts.client.ui.chart.constants.ContainerLayout;
 import gwt.material.design.amcharts.client.ui.chart.cursor.XYCursor;
+import gwt.material.design.amcharts.client.ui.chart.dataitem.AxisDataItem;
 import gwt.material.design.amcharts.client.ui.chart.export.ExportMenu;
 import gwt.material.design.amcharts.client.ui.chart.resources.ChartClientBundle;
 import gwt.material.design.amcharts.client.ui.chart.scrollbar.XYChartScrollbar;
-import gwt.material.design.amcharts.client.ui.chart.series.ColumnSeries;
-import gwt.material.design.amcharts.client.ui.chart.series.LineSeries;
-import gwt.material.design.amcharts.client.ui.chart.series.PieSeries;
+import gwt.material.design.amcharts.client.ui.chart.series.*;
 import gwt.material.design.amcharts.client.ui.chart.state.SpriteState;
 import gwt.material.design.amcharts.client.ui.chart.theme.AnimatedTheme;
 import gwt.material.design.amcharts.client.ui.chart.theme.MaterialTheme;
@@ -50,7 +45,6 @@ import gwt.material.design.amcharts.client.ui.map.base.MapPolygon;
 import gwt.material.design.amcharts.client.ui.map.geodata.WorldLow;
 import gwt.material.design.amcharts.client.ui.map.projections.Miller;
 import gwt.material.design.amcharts.client.ui.map.series.MapPolygonSeries;
-import gwt.material.design.amcharts.client.ui.map.series.MapSeries;
 import gwt.material.design.client.MaterialDesignBase;
 import gwt.material.design.client.ui.MaterialCard;
 import gwt.material.design.client.ui.MaterialToast;
@@ -63,7 +57,9 @@ public class HomeView extends ViewImpl implements HomePresenter.MyView {
     }
 
     @UiField
-    MaterialCard pieChartPanel, xyChartPanel, colorsPanel, columnChartPanel, mapChartPanel;
+    MaterialCard pieChartPanel, xyChartPanel, colorsPanel, colorSetPanel, radarChartPanel, columnChartPanel, mapChartPanel,
+            treeMapPanel, sankeyDiagramPanel, gaugeChartPanel, chordDiagramPanel, slicedChartPanel, slicedPyramidChartPanel,
+            slicedPictorialChartPanel;
 
     @Inject
     HomeView(Binder uiBinder) {
@@ -83,6 +79,13 @@ public class HomeView extends ViewImpl implements HomePresenter.MyView {
         createNewSVGRenderer();
         createColumnChart();
         createMapChart();
+        createColorSetChart();
+        createRadarChart();
+        //createTreeMap();
+        createSankeyDiagram();
+        createGaugeChart();
+        createChordDiagram();
+        createSlicedChart();
     }
 
     protected void createMapChart() {
@@ -155,14 +158,41 @@ public class HomeView extends ViewImpl implements HomePresenter.MyView {
         Container container = (Container) Am4Core.create(colorsPanel, Am4Core.Container);
         container.width = new Percent(100);
         container.height = new Percent(100);
-        Rectangle rectangle = (Rectangle) container.createChild(Am4Core.Rectangle);
-        rectangle.width = new Percent(50);
-        rectangle.height = new Percent(50);
-        rectangle.align = Align.CENTER;
-        rectangle.valign = Valign.MIDDLE;
-        rectangle.strokeWidth = 3;
-        rectangle.fill = new Color("green").lighten(0.5);
-        rectangle.stroke = new Color("red").lighten(-0.5);
+
+        Circle circle = (Circle) container.createChild(Am4Core.Circle);
+        circle.fill = new Color("#A1C084");
+        circle.height = 200;
+        circle.width = new Percent(100);
+        circle.align = "center";
+
+    }
+
+    protected void createColorSetChart() {
+        ColorSet colorSet = new ColorSet();
+        Container container = (Container) Am4Core.create(colorSetPanel, Am4Core.Container);
+        container.width = new Percent(100);
+        container.height = new Percent(100);
+        container.layout = ContainerLayout.GRID;
+        for (int i = 1; i <= 8; i++) {
+            Rectangle rectangle = (Rectangle) container.createChild(Am4Core.Rectangle);
+            rectangle.width = 100;
+            rectangle.height = 100;
+            rectangle.fill = colorSet.next();
+        }
+
+    }
+
+    private void createRadarChart() {
+        RadarChart chart = (RadarChart) Am4Core.create(radarChartPanel, Am4Charts.RadarChart);
+        CategoryAxis categoryAxis = (CategoryAxis) chart.xAxes.push(new CategoryAxis());
+        categoryAxis.dataFields.category = "country";
+        ValueAxis valueAxis = (ValueAxis) chart.yAxes.push(new ValueAxis());
+        RadarSeries series = (RadarSeries) chart.series.push(new RadarSeries());
+        series.dataFields.valueY = "litres";
+        series.dataFields.categoryX = "country";
+
+
+        chart.dataSource.url = "data/basic.json";
     }
 
     protected void createLineChart() {
@@ -210,5 +240,91 @@ public class HomeView extends ViewImpl implements HomePresenter.MyView {
         pieChart.dataSource.url = "data/basic.json";
         // Export feature
         pieChart.exporting.menu = new ExportMenu();
+    }
+
+    private void createTreeMap() {
+        TreeMap treeMap = (TreeMap) Am4Core.create(treeMapPanel, Am4Charts.TreeMap);
+
+        treeMap.dataFields.value = "litres";
+        treeMap.dataFields.name = "country";
+        treeMap.dataSource.url = "data/basic.json";
+    }
+
+    private void createSankeyDiagram() {
+        SankeyDiagram sankeyDiagram = (SankeyDiagram) Am4Core.create(sankeyDiagramPanel, Am4Charts.SankeyDiagram);
+        sankeyDiagram.dataFields.fromName = "from";
+        sankeyDiagram.dataFields.toName = "to";
+        sankeyDiagram.dataFields.value  = "value";
+        sankeyDiagram.dataSource.url = "data/sankey-diagram.json";
+    }
+
+    private void createGaugeChart() {
+        GaugeChart gaugeChart = (GaugeChart) Am4Core.create(gaugeChartPanel, Am4Charts.GaugeChart);
+        gaugeChart.innerRadius = -15;
+
+        ValueAxis valueAxis = (ValueAxis) gaugeChart.xAxes.push(new ValueAxis());
+        valueAxis.min = 0;
+        valueAxis.max = 100;
+        valueAxis.strictMinMax = true;
+
+        ColorSet colorSet = new ColorSet();
+
+        AxisDataItem range = valueAxis.axisRanges.create();
+        range.value = 0;
+        range.endValue = 50;
+        range.axisFill.fillOpacity = 1;
+        range.axisFill.fill = colorSet.getIndex(0);
+
+        AxisDataItem range2 = valueAxis.axisRanges.create();
+        range2.value = 50;
+        range2.endValue = 80;
+        range2.axisFill.fillOpacity = 1;
+        range2.axisFill.fill = colorSet.getIndex(2);
+
+        AxisDataItem range3 = valueAxis.axisRanges.create();
+        range3.value = 80;
+        range3.endValue = 100;
+        range3.axisFill.fillOpacity = 1;
+        range3.axisFill.fill = colorSet.getIndex(4);
+
+        ClockHand hand = gaugeChart.hands.push(new ClockHand());
+        hand.showValue(20);
+    }
+
+    private void createChordDiagram() {
+        ChordDiagram chart = (ChordDiagram) Am4Core.create(chordDiagramPanel, Am4Charts.ChordDiagram);
+        chart.dataFields.fromName = "from";
+        chart.dataFields.toName = "to";
+        chart.dataFields.value  = "value";
+        chart.dataSource.url = "data/sankey-diagram.json";
+    }
+
+    private void createSlicedChart() {
+        // Funnel
+        SlicedChart funnel = (SlicedChart) Am4Core.create(slicedChartPanel, Am4Charts.SlicedChart);
+        FunnelSeries series = (FunnelSeries) funnel.series.push(new FunnelSeries());
+        series.dataFields.value = "litres";
+        series.dataFields.category = "country";
+        series.alignLabels = true;
+        funnel.dataSource.url = "data/basic.json";
+
+        // Pyramid
+        SlicedChart pyramid = (SlicedChart) Am4Core.create(slicedPyramidChartPanel, Am4Charts.SlicedChart);
+        PyramidSeries pySeries = (PyramidSeries) pyramid.series.push(new PyramidSeries());
+        pySeries.dataFields.value = "litres";
+        pySeries.dataFields.category = "country";
+        pySeries.alignLabels = true;
+        pyramid.dataSource.url = "data/basic.json";
+
+        // Pictorial
+        String test = "M53.5,476c0,14,6.833,21,20.5,21s20.5-7,20.5-21V287h21v189c0,14,6.834,21,20.5,21 c13.667,0,20.5-7,20.5-21V154h10v116c0,7.334,2.5,12.667,7.5,16s10.167,3.333,15.5,0s8-8.667,8-16V145c0-13.334-4.5-23.667-13.5-31 s-21.5-11-37.5-11h-82c-15.333,0-27.833,3.333-37.5,10s-14.5,17-14.5,31v133c0,6,2.667,10.333,8,13s10.5,2.667,15.5,0s7.5-7,7.5-13 V154h10V476 M61.5,42.5c0,11.667,4.167,21.667,12.5,30S92.333,85,104,85s21.667-4.167,30-12.5S146.5,54,146.5,42 c0-11.335-4.167-21.168-12.5-29.5C125.667,4.167,115.667,0,104,0S82.333,4.167,74,12.5S61.5,30.833,61.5,42.5z";
+
+        SlicedChart chart = (SlicedChart) Am4Core.create(slicedPictorialChartPanel, Am4Charts.SlicedChart);
+        PictorialStackedSeries picSeries = (PictorialStackedSeries) chart.series.push(new PictorialStackedSeries());
+        picSeries.maskSprite.path = test;
+        picSeries.dataFields.value = "litres";
+        picSeries.dataFields.category = "country";
+        picSeries.alignLabels = true;
+        chart.dataSource.url = "data/basic.json";
     }
 }
