@@ -21,12 +21,19 @@
         xmlns:m="urn:import:gwt.material.design.client.ui">
 
     <m:MaterialPanel>
+        <m:MaterialCard ui:field="mapChartPanel" height="400px"/>
+        <m:MaterialCard ui:field="configFieldPanel" height="400px"/>
+        <m:MaterialCard ui:field="dataSourcePanel" height="400px"/>
+        <m:MaterialCard ui:field="cursorPanel" height="400px"/>
+        <m:MaterialCard ui:field="heatDaysPanel" height="400px"/>
+        <m:MaterialCard ui:field="heatLegendPanel" height="400px"/>
+        <m:MaterialCard ui:field="dataPanel" height="400px"/>
+        <m:MaterialCard ui:field="customPanel" height="400px"/>
         <m:MaterialCard ui:field="pieChartPanel" height="400px"/>
         <m:MaterialCard ui:field="xyChartPanel" height="400px"/>
         <m:MaterialCard ui:field="columnChartPanel" height="400px"/>
         <m:MaterialCard ui:field="colorsPanel" height="400px"/>
         <m:MaterialCard ui:field="colorSetPanel" height="400px"/>
-        <m:MaterialCard ui:field="mapChartPanel" height="400px"/>
         <m:MaterialCard ui:field="radarChartPanel" height="400px"/>
         <m:MaterialCard ui:field="treeMapPanel" height="400px"/>
         <m:MaterialCard ui:field="sankeyDiagramPanel" height="400px"/>
@@ -35,5 +42,6 @@
         <m:MaterialCard ui:field="slicedPyramidChartPanel" height="400px"/>
         <m:MaterialCard ui:field="slicedPictorialChartPanel" height="400px"/>
         <m:MaterialCard ui:field="gaugeChartPanel" height="400px"/>
+
     </m:MaterialPanel>
 </ui:UiBinder>

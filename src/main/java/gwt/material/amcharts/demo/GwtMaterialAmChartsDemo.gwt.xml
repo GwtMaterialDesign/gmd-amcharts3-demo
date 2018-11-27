@@ -39,7 +39,8 @@
     <inherits name="gwt.material.design.addins.GwtMaterialAddinsDebug"/>
     <inherits name="gwt.material.design.incubator.AddinsIncubatorDebug"/>
     <inherits name="gwt.material.design.GwtMaterialTableDebug"/>
-    <inherits name="gwt.material.design.amcharts.GwtMaterialAmChartsDebug" />
+    <inherits name="gwt.material.design.amcharts.GwtMaterialAmCharts" />
+    <inherits name="gwt.material.design.ammaps.GwtMaterialAmMaps" />
 
     <set-configuration-property name="CssResource.enableGss" value="true"/>
 
