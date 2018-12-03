@@ -45,18 +45,15 @@ import gwt.material.design.amcore.client.constants.Align;
 import gwt.material.design.amcore.client.constants.ContainerLayout;
 import gwt.material.design.amcore.client.constants.VerticalAlign;
 import gwt.material.design.amcore.client.export.ExportMenu;
-import gwt.material.design.amcore.client.export.ExportMenuItem;
-import gwt.material.design.amcore.client.language.Language;
+import gwt.material.design.amcore.client.language.Locale;
 import gwt.material.design.amcore.client.properties.HeatRule;
 import gwt.material.design.amcore.client.properties.Range;
-import gwt.material.design.amcore.client.properties.SpriteProperties;
 import gwt.material.design.amcore.client.state.SpriteState;
 import gwt.material.design.amcore.client.theme.AnimatedTheme;
 import gwt.material.design.amcore.client.theme.MaterialTheme;
 import gwt.material.design.amcore.client.ui.Circle;
 import gwt.material.design.amcore.client.ui.Rectangle;
 import gwt.material.design.amcore.client.ui.RoundedRectangle;
-import gwt.material.design.ammaps.client.Am4Maps;
 import gwt.material.design.ammaps.client.MapChart;
 import gwt.material.design.ammaps.client.base.MapPolygon;
 import gwt.material.design.ammaps.client.dataitem.MapDataContext;
@@ -88,12 +85,15 @@ public class HomeView extends ViewImpl implements HomePresenter.MyView {
     protected void onAttach() {
         super.onAttach();
 
-        // Themes
-        Am4Core.useTheme(new AnimatedTheme());
-        Am4Core.useTheme(new MaterialTheme());
+        // Add Themes
+        Am4Core.addTheme(new AnimatedTheme());
+        Am4Core.addTheme(new MaterialTheme());
 
-        // Language
-        Am4Core.useLanguage(Language.ru_RU);
+        // Add Language
+        Am4Core.addLanguage(Locale.ru_RU);
+
+        // Global Language Definition
+        Am4Core.options.defaultLocale = Locale.ru_RU.getValue();
 
         createCustom();
         createPieChart();
@@ -736,7 +736,7 @@ public class HomeView extends ViewImpl implements HomePresenter.MyView {
         // XYChart Demo
         XYChart xyChart = (XYChart) Am4Core.create(xyChartPanel, Am4Charts.XYChart);
         // Language
-        xyChart.language.locale = Language.ru_RU.getValue();
+        xyChart.language.locale = Locale.ru_RU.getValue();
         // DateAxis
         DateAxis dateAxis = (DateAxis) xyChart.xAxes.push(new DateAxis());
         // ValueAxis
