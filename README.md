@@ -1,17 +1,2 @@
-# gwt-material-amcharts-demo
-Demo for gwt-material-amchart (WIP)
-
-
-### Running the demo
-#### Step 1
-- Clone the project and import it to your desired IDE (Eclipse / Intelij IDEA)
-
-#### Step 2
-- After importing, install the project via your terminal
-
-``` mvn clean install ```
-
-#### Step 3
-- If everything is installed, just run the project using the code below
-
-``` mvn gwt:devmode ```
+### This is an old version of Amcharts
+#### See the new V4 [here](https://github.com/GwtMaterialDesign/gwt-material-am4charts)
